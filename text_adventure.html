@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <script src="js/descriptions.js"></script>
+        <script src="js/script.js"></script>
+        <style>
+        </style>
+    </head>
+    <body id="mainBody" onload="initialize()" style="display:flex">
+        <div id="mainText" style="position:absolute;width:1420px;height:315px;left:10px;top:10px;background-color:lightgrey;overflow-y:scroll">
+            Hello, and welcome to An Adventure in a Confused World: The Castle.<br><br>You awake blearily in an uncomfortable cot.
+        </div>
+        <div id="commandHelp" style="position:absolute;width:630px;height:285px;left:800px;top:335px;background-color:lightgrey">
+            Recognized Commands:
+        <br>&nbsp&nbsp-Examine [Item/Room/Person]
+        <br>&nbsp&nbsp-Use [Item] on [Item/Room/Person/Self]
+        <br>&nbsp&nbsp-Use [Doorway]
+        <br>&nbsp&nbsp-Talk [Person]
+        <br>&nbsp&nbsp-Take [Item]
+        <br>&nbsp&nbsp-View Inventory/Health
+        <br>&nbsp&nbsp-Drop [Item]
+        <br>&nbsp&nbsp-Place [Item] in [Container]
+        <br>&nbsp&nbsp-Search [Body]
+        <br>&nbsp&nbsp-Respond to [Person] with [Response Number]
+        <br>To restart, simply refresh the page.
+        </div>
+        <div id="previousInputs" style="position:absolute;width:780px;height:250;left:10px;top:335px;background-color:lightgrey;overflow-y:hidden;display:flex;align-items:flex-end">
+            
+        </div>
+        <input id="actionInput" type="text" placeholder="Input character actions here" style="position:absolute;width:740px;height:25px;left:10px;top:595px">
+        <button id="actionSubmit" type="submit" onclick="checkInput()" style="position:absolute;width:40px;height:25px;left:750px;top:595px;">GO</button>
+        <p id="functionTester"></p>
+        <!---<marquee id="mainText" style="position:absolute;width:1420px;height:315px;left:10px;top:10px;background-color:lightgrey;">Hello, and welcome</marquee>--->
+    </body>
+</html>
