@@ -35,6 +35,34 @@ function shortenName(full_name) {
     }
 }
 
+function trueInside(container, search) {
+    let lst = []
+    if (container instanceof item) {
+        lst = container.contents
+    } else if (container instanceof Array) {
+        lst = container
+    } else if (container instanceof person) {
+        lst = container.inventory
+    } else if (container instanceof room) {
+        lst = container.items.concat(container.people)
+    } else {
+        console.log("That's not how you use trueInside")
+        return false
+    }
+
+    if (lst.includes(search)) {
+        return true
+    } else {
+        for (let ufo of lst) {
+            if (trueInside(ufo, search)) {
+                return true
+            } else {
+                return false
+            }
+        } return false
+    }
+}
+
 function nameSearch(name, container=null) {
     if (name === undefined) {
         return "Please enter a valid object name."
@@ -74,7 +102,7 @@ function nameSearch(name, container=null) {
                     times += 1
                 }
             }
-             if ((i.contents.length != 0) && (!(i.checkAttr("Locked")))) {
+            if ((i.contents.length != 0) && (!(i.checkAttr("Locked")))) {
                 recurse = nameSearch(name, i.contents)
                 if (recurse instanceof gameObject) {
                     found = recurse
@@ -432,9 +460,22 @@ class item extends gameObject {
     placeInside(obj) {
         if (this.attrs.includes("Container")) {
             this.contents.push(obj)
-            obj.rDesc = `A ${obj.name} lies inside a ${this.name}.`
+            obj.rDesc = `A ${obj.name} lies inside the ${this.name}.`
+            this.desc += ` A ${obj.name} lies inside it.`
             return `Placed the ${obj.name} inside the ${this.name}.`
         } return `Can't place items in the ${this.name}.`
+    }
+
+    removeFrom(obj) {
+        if (this.attrs.includes("Container")) {
+            gameState.PC.inventory.push(obj)
+            remove(this.contents, obj)
+            obj.rDesc = `There's also a ${obj.name}.`
+            let tempStr = `A ${obj.name} lies inside it.`
+            let len = tempStr.length
+            this.desc = this.desc.slice(0, -len)
+            return `Removed the ${obj.name} from the ${this.name}.`
+        } return `Can't remove items from the ${this.name}`
     }
 
     pickUp(perp) {
@@ -634,7 +675,7 @@ class gameState {
     static gameOn = true
 
     static lantern = new item(IN8, ID8, IRD8, ["Collectable"],lightsRoom)
-    static orange = new item(IN10, ID10, IRD10)
+    static orange = new item(IN10, ID10, IRD10, ["Collectable"])
     static button = new item(IN9, ID9, IRD9,[], endsGame)
     static card = new key(KN2, KD2, KRD2, gameState.button)
     static pistol = new weapon(WN4, WD4, WRD4, 100, "bullet")
@@ -736,7 +777,7 @@ function checkInput() {
                 else if (!(tarObj instanceof gameObject)) {gameState.descriptionText += `<br>${words[3]} can't be found`}
                 else if (useObj.action === null) {gameState.descriptionText += `<br>The${useObj.name} does not have a usage.`}
                 else {
-                    if (gameState.PC.inventory.includes(useObj)) {
+                    if (trueInside(gameState.PC.inventory, useObj)) {
                         gameState.descriptionText += `<br>${useObj.action(tarObj)}`
                         timeConsuming = true
                     } else {
@@ -823,7 +864,7 @@ function checkInput() {
         } else {
             if (gameState.PC.inventory.length === 0) {
                 gameState.descriptionText += `<br>You're inventory is empty`
-            }else if (gameState.inventory.length === 1) {
+            }else if (gameState.PC.inventory.length === 1) {
                 if (checkVowel(gameState.PC.inventory[0].name)) {gameState.descriptionText += `<br>You have an ${gameState.PC.inventory[0].name} in your inventory`}
                 else {gameState.descriptionText += `<br>You have a ${gameState.PC.inventory[0].name} in your inventory`}
             } else {
@@ -868,12 +909,13 @@ function checkInput() {
                 words[3] = words[3] + " " + words[4]
                 words.splice(4, 1)
             }
-            invObj = nameSearch(words[1], gameState.inventory)
-            conObj = nameSearch(words[3], gameState.PC.room.items)
+            invObj = nameSearch(words[1], gameState.PC.inventory)
+            conObj = nameSearch(words[3])
             if ((invObj instanceof item) && (conObj instanceof item)) {
                 if ((conObj.checkAttr("Container")) && !(conObj.checkAttr("Locked"))) {
-                    conObj.placeInside(invObj)
-                    gameState.descriptionText += `<br> You place the ${invObj.name} inside the ${conObj.name}`
+                    gameState.descriptionText += `<br> ${conObj.placeInside(invObj)}`
+                    console.log(conObj.contents)
+                    remove(gameState.PC.inventory, invObj)
                     timeConsuming = true
                 } else {
                     gameState.descriptionText += `<br>You can't place items inside the ${conObj.name}`
@@ -885,6 +927,34 @@ function checkInput() {
             }
         }
 
+    } else if (words[0] == "remove") {
+      if (gameState.PC.isDead) {
+        gameState.descriptionText += `<br>Why? They already removed your soul from your body.`
+      } else {
+        onIndex = words.indexOf("from")
+        if (onIndex > 2) {
+            words[1] = words[1] + " " + words[2]
+            words.splice(2,1)
+        } if (words.length > 4) {
+            words[3] = words[3] + " " + words[4]
+            words.splice(4,1)
+        }
+        conObj = nameSearch(words[3])
+        if (conObj instanceof item) {remObj = nameSearch(words[1], conObj.contents)}
+        else {gameState.descriptionText += `<br>conObj can't have things in it`}
+        if (remObj instanceof item) {
+            if ((conObj.checkAttr("Container")) && !(conObj.checkAttr("Locked"))) {
+                gameState.descriptionText += `<br>${conObj.removeFrom(remObj)}`
+                timeConsuming = true
+            } else {
+                gameState.descriptionText += `<br>You can't take items from the ${conObj.name}`
+            }
+        } else if (remObj === null) {
+            gameState.descriptionText += `<br>No objects by the name of ${words[1]} in your inventory`
+        } else if (conObj === null) {
+            gameState.descriptionText += `<br>No objects by the name of ${words[3]} in your inventory`
+        }
+      }
     } else if (words[0] === "die") {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>Wouldn't that be redundant?`
@@ -908,7 +978,7 @@ function checkInput() {
                     if (searchObj.inventory.length != 0) {gameState.descriptionText += `<br>The ${searchObj.name} had${list(searchObj.inventory)}`}
                     else {gameState.descriptionText += `<br>The ${searchObj.name} had nothing.`}
                     searchObj.inventory = []
-                    timeConsuming
+                    timeConsuming = true
                 } else {
                     gameState.descriptionText += `<br>That guy's not dead.`
                 }
