@@ -236,12 +236,12 @@ function endsGame(endingObject) {
     document.getElementById("commandHelp").style.backgroundColor = "lightgreen"
     document.getElementById("actionInput").style.backgroundColor = "lightgreen"
     document.getElementById("actionSubmit").style.backgroundColor = "lightgreen"
-    if (endingObject === gameState.button) {return `Suddenly, you appear at the base of the strange tower you've been trapped in. Remembering where you saw smoke, you set out in the direction of civilization.<br>Congradulations, you've completed the Ruthless Ending. Refresh the page to restart or bask in your dishonorable victory. There are three possible endings.`}
+    if (endingObject === gameState.button) {return `Suddenly, you appear at the base of the strange tower you've been trapped in. Remembering where you saw smoke, you set out in the direction of civilization.<br>Congratulations, you've completed the Ruthless Ending. Refresh the page to restart or bask in your dishonorable victory. There are three possible endings.`}
     else if (endingObject === gameState.chute) {
         if ((gameState.guard.isDead) || (gameState.guy.isDead) || (gameState.gunman.isDead)) {
-            return `You parachute down the whole height of the strange tower and land on the ground. Remembering where you saw smoke, you set out in the direction of civilzation.<br>Congradulations, you've completed the Main Ending. Refresh the page to restart or bask in your cannonical ending. There are three possible endings.`
+            return `You parachute down the whole height of the strange tower and land on the ground. Remembering where you saw smoke, you set out in the direction of civilzation.<br>Congratulations, you've completed the Main Ending. Refresh the page to restart or bask in your cannonical ending. There are three possible endings.`
         } else {
-            return `You parachute down the whole height of the strange tower and land on the ground. Remembering where you saw smoke, you set out in the direction of civilzation.<br>Congradulations, you've completed the Pacifict Ending. Refresh the page to restart or bask in your completely innocent ending. There are three possible endings.`
+            return `You parachute down the whole height of the strange tower and land on the ground. Remembering where you saw smoke, you set out in the direction of civilzation.<br>Congratulations, you've completed the Pacifict Ending. Refresh the page to restart or bask in your completely innocent ending. There are three possible endings.`
         }
     }
 }
