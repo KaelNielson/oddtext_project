@@ -905,7 +905,9 @@ function checkInput() {
             if ((searchObj instanceof person)) {
                 if (searchObj.isDead) {
                     gameState.PC.room.items = gameState.PC.room.items.concat(searchObj.inventory)
-                    gameState.descriptionText += `<br>The ${searchObj.name} had${list(searchObj.inventory)}`
+                    if (searchObj.inventory.length != 0) {gameState.descriptionText += `<br>The ${searchObj.name} had${list(searchObj.inventory)}`}
+                    else {gameState.descriptionText += `<br>The ${searchObj.name} had nothing.`}
+                    searchObj.inventory = []
                     timeConsuming
                 } else {
                     gameState.descriptionText += `<br>That guy's not dead.`
