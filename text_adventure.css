@@ -1,0 +1,80 @@
+html {
+    scrollbar-gutter: stable;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+div {
+    background-color: lightgrey;
+}
+
+.padded-upper {
+    padding: 2px;
+    flex: 1;
+    background-color: white;
+    max-height: 50vh;
+}
+
+.upper-half {
+    width: 99%;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.lower-half {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    padding: 2px;
+    background-color: white;
+}
+
+.left-half {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+    padding: 2px;
+    background-color: white;
+}
+
+.padded-right {
+    padding: 2px;
+    flex: 1;
+    background-color: white;
+    overflow-y:hidden;
+}
+
+.right-half {
+    width: 100%;
+    height: 100%;
+}
+
+.input-seg {
+    display: flex;
+    flex-direction: row;
+    overflow-y: hidden;
+    width: 100%
+}
+
+.input-bar {
+    flex: 14;
+}
+
+.input-button {
+    flex: 1;
+}
+
+#previousInputs {
+    overflow-y:hidden;
+    flex:9;
+    bottom: 0;
+    max-height: 45vh;
+}
