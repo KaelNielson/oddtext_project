@@ -2,6 +2,20 @@ html {
     scrollbar-gutter: stable;
 }
 
+header {
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    background-color: white;
+    /* padding: 1px; */
+}
+
+.inner-header {
+    width: 99%;
+    text-align: center;
+    background-color: lightgrey;
+}
+
 body {
     display: flex;
     flex-direction: column;
