@@ -236,7 +236,7 @@ function stoolStuff(target) {
     if (target === gameState.r3) { 
         gameState.chute.toggleAttr("Collectable")
         remove(gameState.PC.inventory, gameState.stool)
-        return `You set down the stool. Standing on it allows you to reach higher items in the room`
+        return `You set down the stool. Now you can reach higher items in the room`
     } else if (target instanceof room) {
         return `You don't need to set that down in this room.`
     } else {
@@ -264,6 +264,7 @@ function endsGame(endingObject) {
     document.getElementById("commandHelp").style.backgroundColor = "lightgreen"
     document.getElementById("actionInput").style.backgroundColor = "lightgreen"
     document.getElementById("actionSubmit").style.backgroundColor = "lightgreen"
+    gameState.hasWon = true;
     if (endingObject === gameState.button) {return `Suddenly, you appear at the base of the strange tower you've been trapped in. Remembering where you saw smoke, you set out in the direction of civilization.<br>Congratulations, you've completed the Ruthless Ending. Refresh the page to restart or bask in your dishonorable victory. There are three possible endings.`}
     else if (endingObject === gameState.chute) {
         if ((gameState.guard.isDead) || (gameState.guy.isDead) || (gameState.gunman.isDead)) {
@@ -674,6 +675,8 @@ class gameState {
     static descriptionText = "Hello, and welcome to An Adventure in a Confused World: The Castle.<br><br>You awake blearily in an uncomfortable cot."
     static gameOn = true
 
+    static hasWon = false
+
     static lantern = new item(IN8, ID8, IRD8, ["Collectable"],lightsRoom)
     static orange = new item(IN10, ID10, IRD10, ["Collectable"])
     static button = new item(IN9, ID9, IRD9,[], endsGame)
@@ -747,6 +750,8 @@ function checkInput() {
     if (words[0] === "examine") {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>You can't look at anything much, you're dead!`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>All you see is victory in every direction.`
         } else {
             if (words.length > 2) {
                 words[1] = words[1] + " " + words[2]
@@ -761,6 +766,8 @@ function checkInput() {
         if (words.includes("on")) {
             if (gameState.PC.isDead) {
                 gameState.descriptionText += `<br>If you ask the worms real nicely, maybe they'll do that for you. Cause buddy, you're dead`
+            } else if (gameState.hasWon) {
+                gameState.descriptionText += `<br>There's not much to do out here, you've already achieved everything`
             } else { 
                 loud = true
                 onIndex = words.indexOf("on")
@@ -789,7 +796,9 @@ function checkInput() {
         } else {
             if (gameState.PC.isDead) {
                 gameState.descriptionText += `<br>The only place you're going is into the light.`
-            } else {
+            } else if (gameState.hasWon) {
+                gameState.descriptionText += `<br>Sorry, you can't go back.`
+            }else {
                 if (words.length > 2) {
                     words[1] = words[1] + " " + words[2]
                     words.splice(2, 1)
@@ -807,6 +816,8 @@ function checkInput() {
     } else if (words[0] === "enter") {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>The only place you're going is into the light.`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>Sorry, you can't go back.`
         } else {
             if (words.length > 2) {
                 words[1] = words[1] + " " + words[2]
@@ -824,6 +835,8 @@ function checkInput() {
     } else if ((words[0] === "take") || (words[0] === "grab")) {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>I'm fairly certain that at this point, that would be grave-robbing`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>Sorry, there's no trophy for you to take.`
         } else {
             loud = true
             if (words.length > 2) {
@@ -843,6 +856,8 @@ function checkInput() {
     } else if (words[0] === "drop") {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>Yeah, you don't have much choice in this matter. You've already dropped everything. You. DIED!`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>Yeah, I guess you could, but you've already won?`
         } else {
             loud = true
             if (!(gameState.dead)) {
@@ -882,6 +897,8 @@ function checkInput() {
     } else if (words[0] === "talk") {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>Sure, you can talk - with whom? Marley? Casper? Banquo? Obi-wan Kenobi?`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>There's no point in talking to anyone, the only one worthy of talking to you is in the mirror ;)`
         } else {
             loud = true
             if (words.length > 2) {
@@ -900,6 +917,8 @@ function checkInput() {
     } else if (words[0] === "place") {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>With what hands, buster? You're dead.`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>Feel free to place yourself on a pedestal, but keep it to that.`
         } else {
             onIndex = words.indexOf("in")
             if (onIndex > 2) {
@@ -930,6 +949,8 @@ function checkInput() {
     } else if (words[0] == "remove") {
       if (gameState.PC.isDead) {
         gameState.descriptionText += `<br>Why? They already removed your soul from your body.`
+      } else if (gameState.hasWon) {
+        gameState.descriptionText += `<br>The only thing you're leaving with is your victory.`
       } else {
         onIndex = words.indexOf("from")
         if (onIndex > 2) {
@@ -966,6 +987,8 @@ function checkInput() {
     } else if (words[0] === "search") {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>How about you do some soul-searching instead?`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>It might be more worth-while to search for a more competent opponent.`
         } else {
             if (words.length > 2) {
                 words[1] = words[1] + " " + words[2]
@@ -990,6 +1013,8 @@ function checkInput() {
     } else if ((words[0] === "respond") && (words[1] === "to")) {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>Yeah, how about you respond to your great-great-grandparents, I think they're calling you.`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>Shouldn't you be responding to a new challenge?`
         } else {if (words.includes("with")) {
                 withIndex = words.indexOf("with")
                 if (withIndex > 3) {
@@ -1012,6 +1037,8 @@ function checkInput() {
     } else if ((words[0] === "attack") || (words[0] === "hit") || (words[0] === "strike") || (words[0] === "smack")) {
         if (gameState.PC.isDead) {
             gameState.descriptionText += `<br>Now would probably actually be a good time to start making peace.`
+        } else if (gameState.hasWon) {
+            gameState.descriptionText += `<br>You've already defeated me`
         } else {
             if (words.includes("with")) {
                 withIndex = words.indexOf("with")
