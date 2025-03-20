@@ -15,6 +15,14 @@ function remove(array, item) {
     array.splice(array.indexOf(item), 1)
 }
 
+function addUp(array) {
+    let runningTotal = "";
+    for (let item of array) {
+        runningTotal += item;
+    }
+    return runningTotal
+}
+
 function getDescRecurse(container) {
     let rString = ""
     for (let whatever of container) {
@@ -671,7 +679,7 @@ class key extends item {
 }
 
 class gameState {
-    static inputText = ""
+    static inputText = ["<br>","<br>","<br>","<br>","<br>","<br>","<br>","<br>","<br>","<br>","<br>","<br>","<br>","<br>"]
     static descriptionText = "Hello, and welcome to An Adventure in a Confused World: The Castle.<br><br>You awake blearily in an uncomfortable cot."
     static gameOn = true
 
@@ -737,8 +745,12 @@ function initialize() {
 function checkInput() {
     let input = document.getElementById("actionInput").value;
     document.getElementById("actionInput").value = "";
-    gameState.inputText += `<br>${input}`
-    document.getElementById("previousInputs").innerHTML = gameState.inputText;
+    gameState.inputText.splice(0, 1)
+    gameState.inputText.push(`<br>${input}`)
+    // console.log(gameState.inputText)
+    let str = addUp(gameState.inputText);
+    // console.log(str)
+    document.getElementById("previousInputs").innerHTML = str
     let words = input.toLowerCase().split(" ");
     let loud = false
     let timeConsuming = false
