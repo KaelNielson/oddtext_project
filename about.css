@@ -1,0 +1,11 @@
+.non-header {
+    /* style="display:flex;flex-direction:column;align-items:center;" */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 6
+}
+
+div {
+    text-align: center;
+}
