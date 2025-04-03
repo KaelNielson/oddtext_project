@@ -1,6 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="universal.css">
+        <link rel="stylesheet" href="menu.css"
     </head>
     <body id="mainBody">
         <header>
@@ -11,11 +12,27 @@
                 <a class="navlink" href="./about.html">About</a>
             </div>
         </header>
-        <div class="padded-upper">
-            Menu and login under development
-        </div>
-        <div class="lower-half">
-
+        <div id="nonHeader">
+            <div style="color:red;background-color: white;">
+                -- Menu and login under development --
+            </div>
+            <div id="lowerItem">
+                <div class="whitespace"></div>
+                <div class="log-box" id="login">
+                    Login
+                    <input type="text" placeholder="username">
+                    <input type="text" placeholder="password">
+                </div>
+                <div class="whitespace"></div>
+                <div class="log-box" id="signup">
+                    Signup
+                    <input type="text" placeholder="username">
+                    <input type="text" placeholder="email(optional)">
+                    <input type="text" placeholder="password">
+                    <input type="text" placeholder="confirm password">
+                </div>
+                <div class="whitespace"></div>
+            </div>
         </div>
     </body>
 </html>

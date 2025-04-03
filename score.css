@@ -1,0 +1,15 @@
+#nonHeader {
+    padding: 2px;
+    background-color: white;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    flex: 12;
+}
+
+#issueNotice {
+    color:red;
+    background-color: white;
+}
